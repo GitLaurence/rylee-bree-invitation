@@ -46,6 +46,12 @@
   background: var(--color-bg);
 }
 
+.admin-home-link {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+}
+
 .admin-table-wrap {
   overflow-x: auto;
   background: var(--color-surface);

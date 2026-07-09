@@ -21,11 +21,12 @@
 
       <form class="admin-login" id="login-form">
         <div class="field">
-          <label for="admin-key">Admin key</label>
+          <label for="admin-key">Password</label>
           <input type="password" id="admin-key" name="admin-key" autocomplete="off" required />
         </div>
         <button type="submit" class="button">View RSVPs</button>
         <div class="form-message" id="login-message" role="alert"></div>
+        <a href="index.html" class="button button--secondary admin-home-link">Back to homepage</a>
       </form>
 
       <div class="admin-panel" id="admin-panel" hidden>
@@ -34,6 +35,7 @@
         <div class="admin-actions">
           <button type="button" class="button button--secondary" id="refresh-button">Refresh</button>
           <button type="button" class="button button--secondary" id="logout-button">Log out</button>
+          <a href="index.html" class="button button--secondary admin-home-link">Back to homepage</a>
         </div>
 
         <div class="admin-table-wrap">

@@ -75,7 +75,7 @@ async function tryLogin(key) {
     sessionStorage.setItem(KEY_STORAGE, key);
   } catch (err) {
     sessionStorage.removeItem(KEY_STORAGE);
-    showLoginError(err.message === 'Unauthorized' ? 'Incorrect admin key.' : err.message);
+    showLoginError(err.message === 'Unauthorized' ? 'Incorrect password.' : err.message);
   }
 }
 
