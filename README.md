@@ -61,10 +61,10 @@ A modern event invitation website with a plain HTML/CSS/JS static frontend. Gues
 - [x] Create a Render Web Service (done — https://rylee-bree-invitation.onrender.com) and a Render Postgres instance; note the internal connection string.
 - [x] Create a Vercel project linked to this repo for the static frontend (done — https://rylee-bree-invitation.vercel.app).
 - [ ] Configure Vercel's "Root Directory" / build settings so it only serves the static files, not `/server`.
-- [ ] Configure Render's Web Service build/start commands to run from `/server` (e.g. Root Directory `server`, Start Command `node server.js`).
+- [x] Configure Render's Web Service build/start commands to run from `/server` (Root Directory `server`, Start Command `node server.js`).
 
 ### Phase 2 — Database Schema (Render Postgres)
-- [ ] Write `db/schema.sql` to create the `rsvps` table:
+- [x] Write `db/schema.sql` to create the `rsvps` table:
   | Column | Type | Notes |
   |---|---|---|
   | `id` | `uuid` default `gen_random_uuid()` | primary key |
@@ -88,7 +88,7 @@ A modern event invitation website with a plain HTML/CSS/JS static frontend. Gues
 ### Phase 4 — RSVP Form & API Integration
 - [ ] Build RSVP form (name, email, attending yes/no, guest count, meal preference, message).
 - [ ] Client-side validation (required fields, email format, guest count bounds).
-- [ ] Write `server/server.js` (Express app) + `server/routes/rsvp.js`: `POST /rsvp` re-validates input server-side, inserts a row via `pg` using `DATABASE_URL`, returns JSON success/error. Enable CORS restricted to the Vercel domain.
+- [x] Write `server/server.js` (Express app) + `server/routes/rsvp.js`: `POST /rsvp` re-validates input server-side, inserts a row via `pg` using `DATABASE_URL`, returns JSON success/error. CORS restricted via `CORS_ORIGIN` env var.
 - [ ] In `js/rsvp.js`, `fetch(`${RENDER_API_URL}/rsvp`, { method: 'POST', body: JSON.stringify(data) })` on form submit, using the base URL from `js/config.js`.
 - [ ] Handle loading/disabled state on submit button, show success/error feedback inline.
 - [ ] Redirect or reveal a "Thank you" confirmation state after successful submit.
