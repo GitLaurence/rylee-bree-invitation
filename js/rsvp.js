@@ -49,6 +49,7 @@ if (form) {
 
     submitButton.disabled = true;
     submitButton.textContent = 'Sending...';
+    form.classList.add('rsvp-form--submitting');
 
     try {
       const response = await fetch('/api/rsvp', {
@@ -61,15 +62,16 @@ if (form) {
 
       if (!response.ok) {
         showMessage(result.error || 'Something went wrong. Please try again.', 'error');
-        submitButton.disabled = false;
-        submitButton.textContent = 'Send RSVP';
         return;
       }
 
       form.hidden = true;
       thankYou.classList.add('thank-you--visible');
+      thankYou.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (err) {
       showMessage('Network error. Please check your connection and try again.', 'error');
+    } finally {
+      form.classList.remove('rsvp-form--submitting');
       submitButton.disabled = false;
       submitButton.textContent = 'Send RSVP';
     }
