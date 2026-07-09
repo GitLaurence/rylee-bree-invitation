@@ -28,27 +28,32 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 ```
 /
 ├── index.html              # Landing / invitation page
-├── rsvp.html               # RSVP form page (or a section on index.html)
-├── thank-you.html          # Confirmation page after RSVP submit
+├── admin.html              # Key-gated page listing all RSVPs in a table
 ├── /css
-│   └── styles.css          # Global styles, design tokens (custom properties)
+│   ├── styles.css          # Global styles, design tokens (custom properties)
+│   └── admin.css           # Admin page-specific styles (login form, table)
 ├── /js
 │   ├── rsvp.js             # Form handling, validation, fetch('/api/rsvp')
+│   ├── admin.js            # Admin login + fetch/render RSVP table
 │   └── main.js             # Shared UI behavior (nav, animations, countdown)
 ├── /api
 │   ├── rsvp.js              # POST: validate + write one JSON blob per RSVP
-│   ├── export.js             # GET: aggregate all RSVP blobs into one downloadable JSON file
+│   ├── export.js             # GET: aggregate all RSVP blobs into one JSON array (used by admin.html and for manual backups)
 │   └── import.js              # POST: re-upload a JSON array of RSVPs as individual blobs
 ├── /assets
 │   ├── images/              # Photos, background art
-│   └── fonts/                # Self-hosted fonts (optional)
+│   └── favicon.svg           # Site favicon
 ├── package.json              # Only dependency: @vercel/blob
 ├── .env.example               # Documents required env values (see below)
 ├── .gitignore
 └── README.md
 ```
 
-> `ADMIN_EXPORT_KEY` gates `/api/export` and `/api/import` so random visitors can't download or overwrite your guest list — pass it as `?key=...` on those two URLs only. `BLOB_READ_WRITE_TOKEN` is generated automatically by Vercel once Blob storage is enabled on the project; neither value is ever referenced from browser-facing JS.
+> `ADMIN_EXPORT_KEY` gates `/api/export` and `/api/import`. The admin page (`admin.html`) sends it as an `x-admin-key` header (not a URL query param, so it never lands in browser history or server logs); direct manual downloads can still use `?key=...`. `BLOB_READ_WRITE_TOKEN` is generated automatically by Vercel once Blob storage is enabled on the project; neither value is ever referenced from the public-facing invitation page's JS.
+
+## Admin Page
+
+Visit `/admin.html` on your deployed site and enter your `ADMIN_EXPORT_KEY` to see a live table of all RSVPs (name, phone, guest count, message, submitted time) with a running total of expected guests. The key is kept only in `sessionStorage` (cleared when you close the tab) — nothing is persisted to disk or synced anywhere. `noindex, nofollow` is set so search engines won't list it, but the page itself isn't hidden by anything other than the key — don't share the URL or key with guests.
 
 ## Implementation Plan
 
@@ -90,7 +95,7 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 - [x] Push to GitHub `main` branch (this repo) — Vercel auto-deploys on every push.
 - [x] Confirm Blob storage and `ADMIN_EXPORT_KEY` are set in Vercel's dashboard (confirmed working via live tests above).
 - [x] Verify RSVP submissions land in Blob storage end-to-end on the deployed site.
-- [ ] Periodically visit `/api/export?key=...` in a browser to download the current guest list as JSON (this also serves as your backup) — ongoing, not a one-time task.
+- [ ] Periodically check `/admin.html` (or `/api/export?key=...` for a raw JSON backup) to review RSVPs — ongoing, not a one-time task.
 
 ## Environment Variables
 

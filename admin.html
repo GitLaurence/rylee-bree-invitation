@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — RSVPs</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <main class="admin">
+    <div class="container">
+      <h1 class="section__title">RSVP List</h1>
+
+      <form class="admin-login" id="login-form">
+        <div class="field">
+          <label for="admin-key">Admin key</label>
+          <input type="password" id="admin-key" name="admin-key" autocomplete="off" required />
+        </div>
+        <button type="submit" class="button">View RSVPs</button>
+        <div class="form-message" id="login-message" role="alert"></div>
+      </form>
+
+      <div class="admin-panel" id="admin-panel" hidden>
+        <div class="admin-summary" id="admin-summary"></div>
+
+        <div class="admin-actions">
+          <button type="button" class="button button--secondary" id="refresh-button">Refresh</button>
+          <button type="button" class="button button--secondary" id="logout-button">Log out</button>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Full name</th>
+                <th>Phone</th>
+                <th>Guests</th>
+                <th>Message</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -13,7 +13,8 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    if (!process.env.ADMIN_EXPORT_KEY || req.query.key !== process.env.ADMIN_EXPORT_KEY) {
+    const providedKey = req.headers['x-admin-key'] || req.query.key;
+    if (!process.env.ADMIN_EXPORT_KEY || providedKey !== process.env.ADMIN_EXPORT_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
