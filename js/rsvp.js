@@ -1,4 +1,4 @@
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^[0-9+\-\s()]{7,20}$/;
 
 const form = document.getElementById('rsvp-form');
 const submitButton = document.getElementById('submit-button');
@@ -17,8 +17,7 @@ function clearMessage() {
 
 function validate(data) {
   if (!data.full_name.trim()) return 'Please enter your name.';
-  if (!EMAIL_RE.test(data.email)) return 'Please enter a valid email address.';
-  if (data.attending === null) return 'Please let us know if you can make it.';
+  if (!PHONE_RE.test(data.phone)) return 'Please enter a valid phone number.';
   if (data.guest_count < 0 || data.guest_count > 20) return 'Guest count must be between 0 and 20.';
   return null;
 }
@@ -35,13 +34,10 @@ if (form) {
       return;
     }
 
-    const attendingValue = formData.get('attending');
     const data = {
       full_name: (formData.get('full_name') || '').toString(),
-      email: (formData.get('email') || '').toString(),
-      attending: attendingValue === null ? null : attendingValue === 'true',
+      phone: (formData.get('phone') || '').toString(),
       guest_count: Number(formData.get('guest_count') || 0),
-      meal_preference: (formData.get('meal_preference') || '').toString(),
       message: (formData.get('message') || '').toString(),
     };
 

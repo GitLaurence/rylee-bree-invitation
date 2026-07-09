@@ -7,7 +7,7 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 ## Goals
 
 - Fast, elegant, mobile-first invitation page that works on any device.
-- Guests can RSVP (attending / not attending), specify guest count, meal preference, and leave a message.
+- Guests can RSVP with their name, phone number, guest count, and an optional message.
 - Every submission lands in one place (Vercel Blob) so you can see all responses, not just the ones on each guest's own device.
 - You can download all responses as a single JSON file anytime, and re-upload a JSON file to restore/migrate data.
 - Single Vercel project, no separate server or database service to maintain.
@@ -59,7 +59,7 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 - [ ] Set `ADMIN_EXPORT_KEY` yourself under Project Settings → Environment Variables (any long random string you choose and keep private).
 
 ### Phase 2 — RSVP API (Vercel Serverless Functions)
-- [x] `api/rsvp.js` — validates input (name, email format, attending boolean, guest count 0-20) and writes `rsvps/<uuid>.json`.
+- [x] `api/rsvp.js` — validates input (name, phone format, guest count 0-20) and writes `rsvps/<uuid>.json`.
 - [x] `api/export.js` — lists all blobs under `rsvps/`, fetches and aggregates them, returns one JSON array, key-protected.
 - [x] `api/import.js` — accepts a JSON array and re-uploads each entry as a blob, key-protected.
 - [ ] Deploy and smoke-test all three routes against the real Blob store once it's enabled (Phase 1).
@@ -72,8 +72,8 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 - [x] Accessibility: semantic landmarks, sufficient color contrast, focus states, alt text.
 
 ### Phase 4 — RSVP Form (Frontend)
-- [x] Build RSVP form (name, email, attending yes/no, guest count, meal preference, message).
-- [x] Client-side validation (required fields, email format, guest count bounds) mirroring the API's checks.
+- [x] Build RSVP form (name, phone number, guest count, message).
+- [x] Client-side validation (required fields, phone format, guest count bounds) mirroring the API's checks.
 - [x] In `js/rsvp.js`, `fetch('/api/rsvp', { method: 'POST', body: JSON.stringify(data) })` on form submit.
 - [x] Handle loading/disabled state on submit button, show success/error feedback inline.
 - [x] Redirect or reveal a "Thank you" confirmation state after successful submit.

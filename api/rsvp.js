@@ -1,23 +1,20 @@
 const { put } = require('@vercel/blob');
 const crypto = require('crypto');
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^[0-9+\-\s()]{7,20}$/;
 
 module.exports = async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { full_name, email, attending, guest_count, meal_preference, message } = req.body || {};
+    const { full_name, phone, guest_count, message } = req.body || {};
 
     if (typeof full_name !== 'string' || !full_name.trim()) {
         return res.status(400).json({ error: 'full_name is required' });
     }
-    if (typeof email !== 'string' || !EMAIL_RE.test(email)) {
-        return res.status(400).json({ error: 'a valid email is required' });
-    }
-    if (typeof attending !== 'boolean') {
-        return res.status(400).json({ error: 'attending must be true or false' });
+    if (typeof phone !== 'string' || !PHONE_RE.test(phone)) {
+        return res.status(400).json({ error: 'a valid phone number is required' });
     }
     const guestCount = Number.isInteger(guest_count) ? guest_count : 0;
     if (guestCount < 0 || guestCount > 20) {
@@ -28,10 +25,8 @@ module.exports = async (req, res) => {
         id: crypto.randomUUID(),
         created_at: new Date().toISOString(),
         full_name: full_name.trim(),
-        email: email.trim(),
-        attending,
+        phone: phone.trim(),
         guest_count: guestCount,
-        meal_preference: meal_preference || null,
         message: message || null,
     };
 
