@@ -396,3 +396,14 @@ a {
   color: var(--color-text-muted);
   font-size: 0.85rem;
 }
+
+.footer__admin-link {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.footer__admin-link:hover {
+  opacity: 1;
+}
