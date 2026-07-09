@@ -1,0 +1,15 @@
+{
+  "name": "rylee-bree-invitation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rylee & Bree event invitation site with RSVP API backed by Render Postgres",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  }
+}
