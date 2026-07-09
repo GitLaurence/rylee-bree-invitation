@@ -1,25 +1,27 @@
 # Rylee & Bree Invitation
 
-A modern event invitation website with a plain HTML/CSS/JS static frontend. Guests view event details, RSVP, and submit their information, which is stored in a Postgres database — both the API and the database live on [Render](https://render.com); the static frontend is hosted on [Vercel](https://vercel.com).
+A modern event invitation website built entirely with HTML, CSS, and vanilla JavaScript, hosted on [Vercel](https://vercel.com). Guests view event details and RSVP; each RSVP is stored as its own JSON file in [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) storage via a small serverless function — no external database to manage.
 
-- Frontend: **https://rylee-bree-invitation.vercel.app**
-- API: **https://rylee-bree-invitation.onrender.com**
+- Site: **https://rylee-bree-invitation.vercel.app**
 
 ## Goals
 
 - Fast, elegant, mobile-first invitation page that works on any device.
 - Guests can RSVP (attending / not attending), specify guest count, meal preference, and leave a message.
-- All submissions persist to a Postgres database via a small API — the browser never talks to Postgres directly.
-- Clean split: Vercel serves only static files; Render runs the API and the database next to each other on Render's private network.
+- Every submission lands in one place (Vercel Blob) so you can see all responses, not just the ones on each guest's own device.
+- You can download all responses as a single JSON file anytime, and re-upload a JSON file to restore/migrate data.
+- Single Vercel project, no separate server or database service to maintain.
 
 ## Tech Stack
 
-- **HTML5** — semantic markup, single `index.html` (or a few static pages: home, RSVP, thank-you).
+- **HTML5** — semantic markup for the invitation, RSVP form, and thank-you state.
 - **CSS3** — modern CSS (custom properties, Grid/Flexbox, `clamp()` for fluid type, no preprocessor).
-- **Vanilla JavaScript (ES Modules)** — no framework; the frontend only calls `fetch()` against the Render API, never the database directly.
-- **Render Web Service** (Node.js/Express) — a small API (`server.js` + routes) that validates input and runs SQL against Postgres using the `pg` client. This is the only "backend code" in the project — everything user-facing stays plain HTML/CSS/JS.
-- **Render Postgres** — managed Postgres database holding the `rsvps` table. Reachable from the Render Web Service over Render's private network (fast, no public exposure needed between the two).
-- **Vercel** — hosts only the static site (`index.html`, `css/`, `js/`, `assets/`). No serverless functions needed since Render owns the API.
+- **Vanilla JavaScript (ES Modules)** — no framework; `js/rsvp.js` calls the site's own `/api/rsvp` route with `fetch()`.
+- **Vercel Serverless Functions** (Node.js, in `/api`) — the only "backend code" in the project:
+  - `POST /api/rsvp` — validates a submission and writes it as `rsvps/<uuid>.json` in Blob storage.
+  - `GET /api/export?key=...` — reads every RSVP blob and returns them as one downloadable JSON array.
+  - `POST /api/import?key=...` — accepts a JSON array and re-uploads each entry as a blob (for restoring a previous export).
+- **Vercel Blob** — stores each RSVP as an individual JSON object. Writing one file per submission avoids read-modify-write race conditions when multiple guests submit around the same time.
 
 ## Project Structure
 
@@ -31,52 +33,36 @@ A modern event invitation website with a plain HTML/CSS/JS static frontend. Gues
 ├── /css
 │   └── styles.css          # Global styles, design tokens (custom properties)
 ├── /js
-│   ├── rsvp.js             # Form handling, validation, fetch(RENDER_API_URL + '/rsvp')
-│   ├── config.js           # Exposes the Render API base URL to the frontend (not a secret)
+│   ├── rsvp.js             # Form handling, validation, fetch('/api/rsvp')
 │   └── main.js             # Shared UI behavior (nav, animations, countdown)
+├── /api
+│   ├── rsvp.js              # POST: validate + write one JSON blob per RSVP
+│   ├── export.js             # GET: aggregate all RSVP blobs into one downloadable JSON file
+│   └── import.js              # POST: re-upload a JSON array of RSVPs as individual blobs
 ├── /assets
 │   ├── images/              # Photos, background art
 │   └── fonts/                # Self-hosted fonts (optional)
-├── /server                   # Render Web Service (Node/Express API)
-│   ├── server.js              # Express app entrypoint, CORS config, routes
-│   ├── db.js                  # pg Pool using process.env.DATABASE_URL
-│   ├── routes/
-│   │   └── rsvp.js             # POST /rsvp handler: validate + insert
-│   └── package.json            # Server-only dependencies (express, pg, cors)
-├── /db
-│   └── schema.sql            # SQL to create the rsvps table on Render Postgres
+├── package.json              # Only dependency: @vercel/blob
 ├── .env.example               # Documents required env values (see below)
 ├── .gitignore
 └── README.md
 ```
 
-> `index.html`/`css`/`js`/`assets` deploy to **Vercel** as a static site. `/server` and `/db` are only relevant to the **Render Web Service** — Vercel ignores them (or a `vercel.json` can explicitly exclude `/server` from the static build if needed).
-
-> The Render Postgres connection string is a secret. It lives only in the Render Web Service's environment variables (used inside `server/db.js`) and is never sent to or read by browser JS. The Render API's public URL, by contrast, is *not* secret — it's referenced directly from `js/config.js` so the frontend knows where to `fetch()`.
+> `ADMIN_EXPORT_KEY` gates `/api/export` and `/api/import` so random visitors can't download or overwrite your guest list — pass it as `?key=...` on those two URLs only. `BLOB_READ_WRITE_TOKEN` is generated automatically by Vercel once Blob storage is enabled on the project; neither value is ever referenced from browser-facing JS.
 
 ## Implementation Plan
 
 ### Phase 1 — Project Setup
-- [x] Initialize repo structure (folders above), `.gitignore` (include `.env`, `node_modules/`).
-- [x] Create a Render Web Service (done — https://rylee-bree-invitation.onrender.com) and a Render Postgres instance; note the internal connection string.
-- [x] Create a Vercel project linked to this repo for the static frontend (done — https://rylee-bree-invitation.vercel.app).
-- [ ] Configure Vercel's "Root Directory" / build settings so it only serves the static files, not `/server`.
-- [x] Configure Render's Web Service build/start commands to run from `/server` (Root Directory `server`, Start Command `node server.js`).
+- [x] Initialize repo structure (folders above), `.gitignore`.
+- [x] Create a Vercel project linked to this repo (done — https://rylee-bree-invitation.vercel.app).
+- [ ] Enable **Vercel Blob** on the project (Vercel dashboard → Storage → Create Database → Blob). This automatically sets `BLOB_READ_WRITE_TOKEN` as an environment variable.
+- [ ] Set `ADMIN_EXPORT_KEY` yourself under Project Settings → Environment Variables (any long random string you choose and keep private).
 
-### Phase 2 — Database Schema (Render Postgres)
-- [x] Write `db/schema.sql` to create the `rsvps` table:
-  | Column | Type | Notes |
-  |---|---|---|
-  | `id` | `uuid` default `gen_random_uuid()` | primary key |
-  | `created_at` | `timestamptz` default `now()` | submission time |
-  | `full_name` | `text` | required |
-  | `email` | `text` | required, basic format validation client-side |
-  | `attending` | `boolean` | yes/no |
-  | `guest_count` | `int2` default 0 | additional guests |
-  | `meal_preference` | `text` | nullable, e.g. "chicken/vegetarian/none" |
-  | `message` | `text` | nullable, well-wishes note |
-- [ ] Run `schema.sql` against the Render database (via Render's dashboard shell or a local `psql` connection using the external connection string).
-- [ ] All access control happens in the API layer (Phase 4) — the database itself trusts whoever holds the connection string, which only the Render Web Service has.
+### Phase 2 — RSVP API (Vercel Serverless Functions)
+- [x] `api/rsvp.js` — validates input (name, email format, attending boolean, guest count 0-20) and writes `rsvps/<uuid>.json`.
+- [x] `api/export.js` — lists all blobs under `rsvps/`, fetches and aggregates them, returns one JSON array, key-protected.
+- [x] `api/import.js` — accepts a JSON array and re-uploads each entry as a blob, key-protected.
+- [ ] Deploy and smoke-test all three routes against the real Blob store once it's enabled (Phase 1).
 
 ### Phase 3 — Invitation Page (HTML/CSS)
 - [ ] Build hero section: names, date, time, venue, countdown timer.
@@ -85,14 +71,13 @@ A modern event invitation website with a plain HTML/CSS/JS static frontend. Gues
 - [ ] Responsive layout using CSS Grid/Flexbox; design tokens via CSS custom properties (colors, spacing, type scale).
 - [ ] Accessibility: semantic landmarks, sufficient color contrast, focus states, alt text.
 
-### Phase 4 — RSVP Form & API Integration
+### Phase 4 — RSVP Form (Frontend)
 - [ ] Build RSVP form (name, email, attending yes/no, guest count, meal preference, message).
-- [ ] Client-side validation (required fields, email format, guest count bounds).
-- [x] Write `server/server.js` (Express app) + `server/routes/rsvp.js`: `POST /rsvp` re-validates input server-side, inserts a row via `pg` using `DATABASE_URL`, returns JSON success/error. CORS restricted via `CORS_ORIGIN` env var.
-- [ ] In `js/rsvp.js`, `fetch(`${RENDER_API_URL}/rsvp`, { method: 'POST', body: JSON.stringify(data) })` on form submit, using the base URL from `js/config.js`.
+- [ ] Client-side validation (required fields, email format, guest count bounds) mirroring the API's checks.
+- [ ] In `js/rsvp.js`, `fetch('/api/rsvp', { method: 'POST', body: JSON.stringify(data) })` on form submit.
 - [ ] Handle loading/disabled state on submit button, show success/error feedback inline.
 - [ ] Redirect or reveal a "Thank you" confirmation state after successful submit.
-- [ ] Basic anti-spam measure (honeypot field and/or simple rate limiting middleware in Express, optional).
+- [ ] Basic anti-spam measure (honeypot field, optional).
 
 ### Phase 5 — Polish
 - [ ] Add subtle animations/transitions (CSS transitions, `IntersectionObserver` for scroll reveals).
@@ -101,32 +86,24 @@ A modern event invitation website with a plain HTML/CSS/JS static frontend. Gues
 - [ ] Cross-browser and mobile testing (iOS Safari, Android Chrome).
 - [ ] Lighthouse pass: performance, accessibility, SEO.
 
-### Phase 6 — Deployment
-- [x] Push to GitHub `main` branch (this repo).
-- [x] Vercel project connected — deploys static frontend on every push to `main`.
-- [x] Render Web Service connected — deploys `/server` API on every push to `main`.
-- [ ] Set `DATABASE_URL` (Render Postgres internal connection string) as a Render environment variable on the Web Service — never commit it, never expose it to the browser.
-- [ ] Set the Render API's public URL in `js/config.js` (or as a Vercel environment variable injected at build time) so the frontend knows where to send requests.
-- [ ] Confirm CORS on the Render API allows requests from the Vercel domain.
-- [ ] Verify RSVP submissions land in the Render `rsvps` table end-to-end on the deployed site.
-
-### Phase 7 (Optional) — Admin View
-- [ ] Simple password-protected route on the Render API (e.g. `GET /admin/rsvps` behind basic auth) listing all RSVPs, counts, and export-to-CSV button.
+### Phase 6 — Deployment & Data Management
+- [x] Push to GitHub `main` branch (this repo) — Vercel auto-deploys on every push.
+- [ ] Confirm Blob storage and `ADMIN_EXPORT_KEY` are set in Vercel's dashboard.
+- [ ] Verify RSVP submissions land in Blob storage end-to-end on the deployed site.
+- [ ] Periodically visit `/api/export?key=...` in a browser to download the current guest list as JSON (this also serves as your backup).
 
 ## Environment Variables
 
-Documented in `.env.example` for reference. `DATABASE_URL` is **server-side only** (used inside `server/db.js` on Render) and must never be referenced from `/js` files that ship to the browser:
+Documented in `.env.example`. Both are **server-side only** (used inside `/api` functions) and must never be referenced from `/js` files that ship to the browser:
 
 ```
-DATABASE_URL=postgres://user:password@host:port/dbname   # Render Postgres internal connection string
-PORT=10000                                                 # Render sets this automatically
-CORS_ORIGIN=https://rylee-bree-invitation.vercel.app       # Restrict API access to the frontend's domain
+BLOB_READ_WRITE_TOKEN=...   # set automatically by Vercel when Blob storage is enabled
+ADMIN_EXPORT_KEY=...        # choose your own long random string; gates /api/export and /api/import
 ```
 
 ## Getting Started (once code exists)
 
-1. Render Postgres and Web Service already exist (see links above). Run `db/schema.sql` against the database to create the `rsvps` table.
-2. In the Render Web Service settings, set Root Directory to `server`, Start Command to `node server.js`, and add the `DATABASE_URL` / `CORS_ORIGIN` environment variables.
-3. In the Vercel project settings, confirm the Root Directory is the repo root (or wherever the static files live) so `/server` and `/db` aren't included in the static build.
-4. Run the API locally with `cd server && npm install && node server.js`, and open `index.html` with any static server (e.g. `npx serve`) pointing `js/config.js` at `http://localhost:<port>`.
-5. Submit a test RSVP and confirm the row appears in the `rsvps` table (via Render's dashboard or `psql`).
+1. Enable Blob storage on the Vercel project (Storage tab → Create Database → Blob) — this sets `BLOB_READ_WRITE_TOKEN` for you.
+2. Add `ADMIN_EXPORT_KEY` yourself under Project Settings → Environment Variables.
+3. Run locally with `vercel dev` (requires `vercel login` once) so `/api` functions and the static files serve together the same way they will in production.
+4. Submit a test RSVP through the form, then visit `/api/export?key=<your key>` to confirm it appears in the exported JSON.
