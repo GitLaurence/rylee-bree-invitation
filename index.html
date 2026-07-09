@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rylee &amp; Bree — You're Invited</title>
+  <meta name="description" content="Join us to celebrate Rylee & Bree. RSVP below." />
+
+  <meta property="og:title" content="Rylee & Bree — You're Invited" />
+  <meta property="og:description" content="Join us to celebrate Rylee & Bree. RSVP below." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/assets/images/cover.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="hero__eyebrow">You're invited to celebrate</p>
+        <h1 class="hero__names">
+          <span>Rylee <span class="hero__ampersand">&amp;</span> Bree</span>
+        </h1>
+        <p class="hero__date" id="event-date-display">Saturday, September 12, 2026 &middot; 4:00 PM</p>
+
+        <div class="countdown" id="countdown" data-event-datetime="2026-09-12T16:00:00">
+          <div class="countdown__unit">
+            <span class="countdown__value" data-unit="days">--</span>
+            <span class="countdown__label">Days</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__value" data-unit="hours">--</span>
+            <span class="countdown__label">Hours</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__value" data-unit="minutes">--</span>
+            <span class="countdown__label">Minutes</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__value" data-unit="seconds">--</span>
+            <span class="countdown__label">Seconds</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="details">
+      <div class="container">
+        <h2 class="section__title reveal">Event Details</h2>
+        <div class="details reveal">
+          <div class="details__card">
+            <h3>When</h3>
+            <p>Saturday, September 12, 2026<br />4:00 PM</p>
+          </div>
+          <div class="details__card">
+            <h3>Where</h3>
+            <p>The Garden Pavilion<br />123 Celebration Ave, Springfield</p>
+          </div>
+          <div class="details__card">
+            <h3>Dress Code</h3>
+            <p>Garden formal<br />Soft, warm tones welcome</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="rsvp">
+      <div class="container">
+        <h2 class="section__title reveal">RSVP</h2>
+
+        <form class="rsvp-form reveal" id="rsvp-form" novalidate>
+          <div class="field field--honeypot" aria-hidden="true">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <label for="full_name">Full name</label>
+            <input type="text" id="full_name" name="full_name" required autocomplete="name" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+
+          <div class="field">
+            <span>Will you be attending?</span>
+            <div class="radio-group">
+              <label><input type="radio" name="attending" value="true" required /> Joyfully accept</label>
+              <label><input type="radio" name="attending" value="false" /> Regretfully decline</label>
+            </div>
+          </div>
+
+          <div class="field field--row">
+            <label for="guest_count" style="flex: 1;">Additional guests</label>
+            <input type="number" id="guest_count" name="guest_count" min="0" max="20" value="0" style="width: 80px;" />
+          </div>
+
+          <div class="field">
+            <label for="meal_preference">Meal preference</label>
+            <select id="meal_preference" name="meal_preference">
+              <option value="">No preference</option>
+              <option value="chicken">Chicken</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+              <option value="none">None for me</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Message for the couple (optional)</label>
+            <textarea id="message" name="message" maxlength="500"></textarea>
+          </div>
+
+          <div class="form-message" id="form-message" role="alert"></div>
+
+          <button type="submit" class="button" id="submit-button">Send RSVP</button>
+        </form>
+
+        <div class="thank-you" id="thank-you">
+          <h3 class="thank-you__title">Thank you!</h3>
+          <p>Your RSVP has been received. We can't wait to celebrate with you.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>With love, Rylee &amp; Bree</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/rsvp.js"></script>
+</body>
+</html>

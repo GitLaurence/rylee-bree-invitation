@@ -65,23 +65,23 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 - [ ] Deploy and smoke-test all three routes against the real Blob store once it's enabled (Phase 1).
 
 ### Phase 3 — Invitation Page (HTML/CSS)
-- [ ] Build hero section: names, date, time, venue, countdown timer.
-- [ ] Event details section (schedule, location with embedded map link, dress code, registry link if needed).
+- [x] Build hero section: names, date, time, venue, countdown timer.
+- [x] Event details section (when/where/dress code cards; registry/schedule can be added later).
 - [ ] Photo gallery / story section (optional).
-- [ ] Responsive layout using CSS Grid/Flexbox; design tokens via CSS custom properties (colors, spacing, type scale).
-- [ ] Accessibility: semantic landmarks, sufficient color contrast, focus states, alt text.
+- [x] Responsive layout using CSS Grid/Flexbox; design tokens via CSS custom properties (colors, spacing, type scale).
+- [x] Accessibility: semantic landmarks, sufficient color contrast, focus states, alt text.
 
 ### Phase 4 — RSVP Form (Frontend)
-- [ ] Build RSVP form (name, email, attending yes/no, guest count, meal preference, message).
-- [ ] Client-side validation (required fields, email format, guest count bounds) mirroring the API's checks.
-- [ ] In `js/rsvp.js`, `fetch('/api/rsvp', { method: 'POST', body: JSON.stringify(data) })` on form submit.
-- [ ] Handle loading/disabled state on submit button, show success/error feedback inline.
-- [ ] Redirect or reveal a "Thank you" confirmation state after successful submit.
-- [ ] Basic anti-spam measure (honeypot field, optional).
+- [x] Build RSVP form (name, email, attending yes/no, guest count, meal preference, message).
+- [x] Client-side validation (required fields, email format, guest count bounds) mirroring the API's checks.
+- [x] In `js/rsvp.js`, `fetch('/api/rsvp', { method: 'POST', body: JSON.stringify(data) })` on form submit.
+- [x] Handle loading/disabled state on submit button, show success/error feedback inline.
+- [x] Redirect or reveal a "Thank you" confirmation state after successful submit.
+- [x] Basic anti-spam measure (honeypot field).
 
 ### Phase 5 — Polish
-- [ ] Add subtle animations/transitions (CSS transitions, `IntersectionObserver` for scroll reveals).
-- [ ] Add countdown-to-event script in `main.js`.
+- [x] Add subtle animations/transitions (CSS transitions, `IntersectionObserver` for scroll reveals).
+- [x] Add countdown-to-event script in `main.js`.
 - [ ] Add favicon, social share meta tags (Open Graph/Twitter card) with event image.
 - [ ] Cross-browser and mobile testing (iOS Safari, Android Chrome).
 - [ ] Lighthouse pass: performance, accessibility, SEO.
