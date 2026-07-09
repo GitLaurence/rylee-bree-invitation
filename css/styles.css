@@ -112,6 +112,13 @@ a {
   font-size: 0.6em;
 }
 
+.hero__subname {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
 .hero__date {
   margin: var(--space-3) 0 0;
   font-size: 1.1rem;
