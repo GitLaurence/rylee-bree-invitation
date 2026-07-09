@@ -6,9 +6,21 @@ function startCountdown(el) {
     minutes: el.querySelector('[data-unit="minutes"]'),
     seconds: el.querySelector('[data-unit="seconds"]'),
   };
+  let intervalId;
+
+  function finish() {
+    clearInterval(intervalId);
+    el.innerHTML = '<p class="countdown__done-message">🎉 It\'s Bree\'s big day!</p>';
+  }
 
   function tick() {
     const diff = Math.max(0, target - Date.now());
+
+    if (diff <= 0) {
+      finish();
+      return;
+    }
+
     const days = Math.floor(diff / 86400000);
     const hours = Math.floor((diff % 86400000) / 3600000);
     const minutes = Math.floor((diff % 3600000) / 60000);
@@ -18,12 +30,10 @@ function startCountdown(el) {
     values.hours.textContent = String(hours).padStart(2, '0');
     values.minutes.textContent = String(minutes).padStart(2, '0');
     values.seconds.textContent = String(seconds).padStart(2, '0');
-
-    if (diff <= 0) clearInterval(intervalId);
   }
 
   tick();
-  const intervalId = setInterval(tick, 1000);
+  intervalId = setInterval(tick, 1000);
 }
 
 function initRevealOnScroll() {

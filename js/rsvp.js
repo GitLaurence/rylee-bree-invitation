@@ -15,17 +15,65 @@ function clearMessage() {
   formMessage.className = 'form-message';
 }
 
+function clearFieldErrors() {
+  form.querySelectorAll('.field--invalid').forEach((field) => {
+    field.classList.remove('field--invalid');
+    const input = field.querySelector('input, textarea');
+    if (input) input.removeAttribute('aria-invalid');
+  });
+}
+
+function markFieldInvalid(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const field = input.closest('.field');
+  if (field) field.classList.add('field--invalid');
+  input.setAttribute('aria-invalid', 'true');
+  input.focus();
+}
+
 function validate(data) {
-  if (!data.full_name.trim()) return 'Please enter your name.';
-  if (!PHONE_RE.test(data.phone)) return 'Please enter a valid phone number.';
-  if (data.guest_count < 0 || data.guest_count > 20) return 'Guest count must be between 0 and 20.';
+  if (!data.full_name.trim()) return { field: 'full_name', message: 'Please enter your name.' };
+  if (!PHONE_RE.test(data.phone)) return { field: 'phone', message: 'Please enter a valid phone number.' };
+  if (data.guest_count < 0 || data.guest_count > 20) {
+    return { field: 'guest_count', message: 'Guest count must be between 0 and 20.' };
+  }
   return null;
 }
 
+function initStepper() {
+  const input = document.getElementById('guest_count');
+  if (!input) return;
+
+  document.querySelectorAll('.stepper__btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const step = Number(btn.dataset.step);
+      const current = Number(input.value) || 0;
+      input.value = Math.min(20, Math.max(0, current + step));
+    });
+  });
+}
+
+function initMessageCounter() {
+  const input = document.getElementById('message');
+  const counter = document.getElementById('message-count');
+  if (!input || !counter) return;
+
+  const update = () => {
+    counter.textContent = `${input.value.length} / 500`;
+  };
+  input.addEventListener('input', update);
+  update();
+}
+
 if (form) {
+  initStepper();
+  initMessageCounter();
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     clearMessage();
+    clearFieldErrors();
 
     const formData = new FormData(form);
 
@@ -43,7 +91,8 @@ if (form) {
 
     const validationError = validate(data);
     if (validationError) {
-      showMessage(validationError, 'error');
+      showMessage(validationError.message, 'error');
+      markFieldInvalid(validationError.field);
       return;
     }
 
