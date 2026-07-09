@@ -44,16 +44,21 @@ function renderRsvps(entries) {
   const totalGuests = entries.reduce((sum, e) => sum + 1 + (Number(e.guest_count) || 0), 0);
   adminSummary.textContent = `${entries.length} RSVP${entries.length === 1 ? '' : 's'} · ${totalGuests} total ${totalGuests === 1 ? 'guest' : 'guests'} expected`;
 
+  if (entries.length === 0) {
+    tableBody.innerHTML = '<tr><td class="admin-table__empty" colspan="6">No RSVPs yet.</td></tr>';
+    return;
+  }
+
   tableBody.innerHTML = entries
     .map(
       (entry, i) => `
       <tr>
-        <td>${i + 1}</td>
-        <td>${escapeHtml(entry.full_name)}</td>
-        <td>${escapeHtml(entry.phone)}</td>
-        <td>${escapeHtml(entry.guest_count)}</td>
-        <td>${escapeHtml(entry.message)}</td>
-        <td>${escapeHtml(formatDate(entry.created_at))}</td>
+        <td data-label="#">${i + 1}</td>
+        <td data-label="Full name">${escapeHtml(entry.full_name)}</td>
+        <td data-label="Phone">${escapeHtml(entry.phone)}</td>
+        <td data-label="Guests">${escapeHtml(entry.guest_count)}</td>
+        <td data-label="Message">${entry.message ? escapeHtml(entry.message) : '—'}</td>
+        <td data-label="Submitted">${escapeHtml(formatDate(entry.created_at))}</td>
       </tr>
     `
     )
