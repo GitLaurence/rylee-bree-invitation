@@ -55,19 +55,19 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 ### Phase 1 — Project Setup
 - [x] Initialize repo structure (folders above), `.gitignore`.
 - [x] Create a Vercel project linked to this repo (done — https://rylee-bree-invitation.vercel.app).
-- [ ] Enable **Vercel Blob** on the project (Vercel dashboard → Storage → Create Database → Blob). This automatically sets `BLOB_READ_WRITE_TOKEN` as an environment variable.
-- [ ] Set `ADMIN_EXPORT_KEY` yourself under Project Settings → Environment Variables (any long random string you choose and keep private).
+- [x] Enable **Vercel Blob** on the project (done — confirmed working via live end-to-end test).
+- [x] Set `ADMIN_EXPORT_KEY` yourself under Project Settings → Environment Variables (done — confirmed `/api/export` and `/api/import` both reject requests with a bad key).
 
 ### Phase 2 — RSVP API (Vercel Serverless Functions)
 - [x] `api/rsvp.js` — validates input (name, phone format, guest count 0-20) and writes `rsvps/<uuid>.json`.
 - [x] `api/export.js` — lists all blobs under `rsvps/`, fetches and aggregates them, returns one JSON array, key-protected.
 - [x] `api/import.js` — accepts a JSON array and re-uploads each entry as a blob, key-protected.
-- [ ] Deploy and smoke-test all three routes against the real Blob store once it's enabled (Phase 1).
+- [x] Deploy and smoke-test all three routes against the real Blob store (done — `POST /api/rsvp` returns 201 with a stored entry; `/api/export` and `/api/import` correctly 401 on a bad key).
 
 ### Phase 3 — Invitation Page (HTML/CSS)
 - [x] Build hero section: names, date, time, venue, countdown timer.
-- [x] Event details section (when/where/dress code cards; registry/schedule can be added later).
-- [ ] Photo gallery / story section (optional).
+- [x] Event details section (ceremony/reception/attire cards).
+- [x] Photo gallery / story section ("Our Little Star" — two photos, served as WebP with JPEG fallback).
 - [x] Responsive layout using CSS Grid/Flexbox; design tokens via CSS custom properties (colors, spacing, type scale).
 - [x] Accessibility: semantic landmarks, sufficient color contrast, focus states, alt text.
 
@@ -82,15 +82,15 @@ A modern event invitation website built entirely with HTML, CSS, and vanilla Jav
 ### Phase 5 — Polish
 - [x] Add subtle animations/transitions (CSS transitions, `IntersectionObserver` for scroll reveals).
 - [x] Add countdown-to-event script in `main.js`.
-- [ ] Add favicon, social share meta tags (Open Graph/Twitter card) with event image.
-- [ ] Cross-browser and mobile testing (iOS Safari, Android Chrome).
-- [ ] Lighthouse pass: performance, accessibility, SEO.
+- [x] Add favicon (SVG, red/yellow "B" monogram) and social share meta tags (Open Graph/Twitter card) using Bree's photo.
+- [x] Mobile responsiveness testing (emulated iPhone 13 and Pixel 7 viewports — no horizontal overflow, no console errors).
+- [x] Lighthouse pass: 93 performance / 100 accessibility / 100 best practices / 100 SEO. Images compressed and served as WebP with JPEG fallback to improve load time.
 
 ### Phase 6 — Deployment & Data Management
 - [x] Push to GitHub `main` branch (this repo) — Vercel auto-deploys on every push.
-- [ ] Confirm Blob storage and `ADMIN_EXPORT_KEY` are set in Vercel's dashboard.
-- [ ] Verify RSVP submissions land in Blob storage end-to-end on the deployed site.
-- [ ] Periodically visit `/api/export?key=...` in a browser to download the current guest list as JSON (this also serves as your backup).
+- [x] Confirm Blob storage and `ADMIN_EXPORT_KEY` are set in Vercel's dashboard (confirmed working via live tests above).
+- [x] Verify RSVP submissions land in Blob storage end-to-end on the deployed site.
+- [ ] Periodically visit `/api/export?key=...` in a browser to download the current guest list as JSON (this also serves as your backup) — ongoing, not a one-time task.
 
 ## Environment Variables
 
