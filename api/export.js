@@ -1,4 +1,12 @@
-const { list } = require('@vercel/blob');
+const { list, get } = require('@vercel/blob');
+
+async function streamToString(stream) {
+    const chunks = [];
+    for await (const chunk of stream) {
+        chunks.push(chunk);
+    }
+    return Buffer.concat(chunks).toString('utf-8');
+}
 
 module.exports = async (req, res) => {
     if (req.method !== 'GET') {
@@ -15,8 +23,10 @@ module.exports = async (req, res) => {
         do {
             const page = await list({ prefix: 'rsvps/', cursor, limit: 1000 });
             for (const blob of page.blobs) {
-                const response = await fetch(blob.url);
-                entries.push(await response.json());
+                const result = await get(blob.pathname, { access: 'private' });
+                if (result) {
+                    entries.push(JSON.parse(await streamToString(result.stream)));
+                }
             }
             cursor = page.cursor;
         } while (cursor);

@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
 
     try {
         await put(`rsvps/${entry.id}.json`, JSON.stringify(entry), {
-            access: 'public',
+            access: 'private',
             addRandomSuffix: false,
             contentType: 'application/json',
         });

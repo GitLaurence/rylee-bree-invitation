@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
         for (const entry of entries) {
             const id = entry.id || crypto.randomUUID();
             await put(`rsvps/${id}.json`, JSON.stringify({ ...entry, id }), {
-                access: 'public',
+                access: 'private',
                 addRandomSuffix: false,
                 contentType: 'application/json',
             });
