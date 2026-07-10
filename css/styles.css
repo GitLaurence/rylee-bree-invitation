@@ -39,29 +39,8 @@
   --shadow-lg: 0 20px 50px rgba(107, 74, 80, 0.16);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #241417;
-    --color-surface: #2f1b1e;
-    --color-surface-alt: #2a181b;
-    --color-text: #f3e6e2;
-    --color-heading: #f0d8d3;
-    --color-text-muted: #cba7a3;
-    --color-text-faint: #a98481;
-    --color-accent: #e39aa6;
-    --color-accent-dark: #f0b4bd;
-    --color-accent-soft: #402328;
-    --color-on-accent: #2a1114;
-    --color-border: #47282b;
-    --color-border-strong: #55302f;
-    --color-border-accent: #6b3c3c;
-    --color-divider: #3a2124;
-    --color-success-bg: #1f2c1f;
-    --color-success-text: #9bd39e;
-    --color-error-bg: #402019;
-    --color-error-text: #ff9b8f;
-  }
-}
+/* Intentionally no dark-mode variant: the design is a single fixed
+   blush/rose palette, matching the reference mockup in both themes. */
 
 * {
   box-sizing: border-box;
@@ -79,6 +58,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  color-scheme: light;
 }
 
 img {
@@ -135,12 +115,6 @@ a {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--color-divider);
-}
-
-@media (prefers-color-scheme: dark) {
-  .nav {
-    background: rgba(36, 20, 23, 0.82);
-  }
 }
 
 .nav__row {
