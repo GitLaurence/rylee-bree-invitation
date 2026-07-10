@@ -58,7 +58,47 @@ function initRevealOnScroll() {
   revealEls.forEach((el) => observer.observe(el));
 }
 
+function initScrollProgress() {
+  const bar = document.getElementById('nav-progress');
+  if (!bar) return;
+
+  function update() {
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = `${pct.toFixed(1)}%`;
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+}
+
+function initPetals() {
+  const container = document.getElementById('petals');
+  if (!container) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const count = 14;
+  for (let i = 0; i < count; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    const left = (i * 7.3 + 3) % 100;
+    const duration = 14 + (i % 5) * 3;
+    const delay = -(i * 2.7);
+    const size = 8 + (i % 4) * 3;
+    petal.style.left = `${left}%`;
+    petal.style.width = `${size}px`;
+    petal.style.height = `${size}px`;
+    petal.style.animationDuration = `${duration}s`;
+    petal.style.animationDelay = `${delay}s`;
+    container.appendChild(petal);
+  }
+}
+
 const countdownEl = document.getElementById('countdown');
 if (countdownEl) startCountdown(countdownEl);
 
 initRevealOnScroll();
+initScrollProgress();
+initPetals();

@@ -15,72 +15,128 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <picture>
-          <source srcset="assets/images/bree1.webp" type="image/webp" />
-          <img class="hero__photo" src="assets/images/bree1.jpg" alt="Bree smiling in a pink ruffled dress" width="220" height="220" />
-        </picture>
-        <p class="hero__eyebrow">You're invited to celebrate the Christening of</p>
-        <h1 class="hero__names">
-          <span>Bree</span>
-        </h1>
-        <p class="hero__subname">Scarlett Brielle Lopez</p>
-        <p class="hero__date" id="event-date-display">Sunday, September 6, 2026 &middot; 10:00 AM</p>
+  <nav class="nav">
+    <div class="nav__row">
+      <a href="#top" class="nav__brand">
+        <span class="nav__mark" aria-hidden="true">B</span>
+        <span class="nav__title">Bree's Christening</span>
+      </a>
+      <div class="nav__links">
+        <a href="#details" class="nav__link">Details</a>
+        <a href="#gallery" class="nav__link">Gallery</a>
+        <a href="#rsvp" class="nav__link nav__link--cta">RSVP</a>
+      </div>
+    </div>
+    <div class="nav__progress" id="nav-progress"></div>
+  </nav>
 
-        <div class="countdown" id="countdown" data-event-datetime="2026-09-06T10:00:00">
-          <div class="countdown__unit">
-            <span class="countdown__value" data-unit="days">--</span>
-            <span class="countdown__label">Days</span>
+  <main>
+    <section class="hero" id="top">
+      <div class="hero__glow hero__glow--one" aria-hidden="true"></div>
+      <div class="hero__glow hero__glow--two" aria-hidden="true"></div>
+      <div class="petals" id="petals" aria-hidden="true"></div>
+
+      <div class="container">
+        <div class="hero__copy">
+          <div class="hero__badge">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            You're invited
           </div>
-          <div class="countdown__unit">
-            <span class="countdown__value" data-unit="hours">--</span>
-            <span class="countdown__label">Hours</span>
+          <p class="hero__eyebrow">To celebrate the Christening of</p>
+          <h1 class="hero__names">Bree</h1>
+          <p class="hero__subname">Scarlett Brielle Lopez</p>
+          <p class="hero__meta" id="event-date-display">
+            <strong>Sunday, September 6, 2026</strong>
+            <span class="hero__meta-dot">&middot;</span>
+            <span>10:00 AM &middot; Balanga, Bataan</span>
+          </p>
+
+          <div class="countdown" id="countdown" data-event-datetime="2026-09-06T10:00:00">
+            <div class="countdown__unit">
+              <span class="countdown__value" data-unit="days">--</span>
+              <span class="countdown__label">Days</span>
+            </div>
+            <div class="countdown__unit">
+              <span class="countdown__value" data-unit="hours">--</span>
+              <span class="countdown__label">Hours</span>
+            </div>
+            <div class="countdown__unit">
+              <span class="countdown__value" data-unit="minutes">--</span>
+              <span class="countdown__label">Minutes</span>
+            </div>
+            <div class="countdown__unit">
+              <span class="countdown__value" data-unit="seconds">--</span>
+              <span class="countdown__label">Seconds</span>
+            </div>
           </div>
-          <div class="countdown__unit">
-            <span class="countdown__value" data-unit="minutes">--</span>
-            <span class="countdown__label">Minutes</span>
-          </div>
-          <div class="countdown__unit">
-            <span class="countdown__value" data-unit="seconds">--</span>
-            <span class="countdown__label">Seconds</span>
+
+          <div class="hero__actions">
+            <a href="#rsvp" class="button">RSVP Now →</a>
+            <a class="button button--ghost"
+               href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Bree%27s%20Christening&amp;dates=20260906T100000/20260906T150000&amp;ctz=Asia/Manila&amp;details=Christening%20of%20Scarlett%20Brielle%20Lopez%20(Bree).%20Reception%20follows%20at%201%3A00%20PM%20at%20Jollibee%2C%20Balanga%20Center%20Plaza%20Mall.&amp;location=Jollibee%2C%20Balanga%20Center%20Plaza%20Mall%2C%20Balanga%2C%20Bataan"
+               target="_blank" rel="noopener">Add to Calendar</a>
           </div>
         </div>
 
-        <div class="hero__actions">
-          <a href="#rsvp" class="button">RSVP Now</a>
-          <a class="button button--ghost"
-             href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Bree%27s%20Christening&amp;dates=20260906T100000/20260906T150000&amp;ctz=Asia/Manila&amp;details=Christening%20of%20Scarlett%20Brielle%20Lopez%20(Bree).%20Reception%20follows%20at%201%3A00%20PM%20at%20Jollibee%2C%20Balanga%20Center%20Plaza%20Mall.&amp;location=Jollibee%2C%20Balanga%20Center%20Plaza%20Mall%2C%20Balanga%2C%20Bataan"
-             target="_blank" rel="noopener">Add to Calendar</a>
+        <div class="hero__photo-wrap">
+          <div class="hero__photo-frame" aria-hidden="true"></div>
+          <picture>
+            <source srcset="assets/images/bree1.webp" type="image/webp" />
+            <img class="hero__photo" src="assets/images/bree1.jpg" alt="Bree smiling in a pink ruffled dress" width="360" height="450" />
+          </picture>
+          <div class="hero__badge-float">
+            <span aria-hidden="true">🕊️</span>
+            <div>
+              <div class="hero__badge-float-title">Our little star</div>
+              <div class="hero__badge-float-sub">turns to the light</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="details">
+    <section class="section section--surface" id="details">
       <div class="container">
+        <p class="eyebrow reveal">The Day</p>
         <h2 class="section__title reveal">Event Details</h2>
         <div class="details">
           <div class="details__card reveal">
-            <span class="details__icon" aria-hidden="true">⛪</span>
+            <div class="details__top">
+              <span class="details__icon" aria-hidden="true">⛪</span>
+              <span class="details__number" aria-hidden="true">01</span>
+            </div>
             <h3>Ceremony</h3>
-            <p>Sunday, September 6, 2026<br />10:00 AM</p>
+            <p>Sunday, September 6, 2026<br /><strong>10:00 AM</strong></p>
+            <span class="details__tag">Doors open 9:30 AM</span>
           </div>
           <div class="details__card reveal">
-            <span class="details__icon" aria-hidden="true">🎉</span>
+            <div class="details__top">
+              <span class="details__icon" aria-hidden="true">🎉</span>
+              <span class="details__number" aria-hidden="true">02</span>
+            </div>
             <h3>Reception</h3>
-            <p>1:00 PM<br />Jollibee &ndash; Balanga Center Plaza Mall</p>
-            <a class="details__link" href="https://www.google.com/maps/search/?api=1&amp;query=Jollibee%20Balanga%20Center%20Plaza%20Mall" target="_blank" rel="noopener">View map</a>
+            <p><strong>1:00 PM</strong><br />Jollibee &ndash; Balanga Center Plaza Mall</p>
+            <a class="details__link" href="https://www.google.com/maps/search/?api=1&amp;query=Jollibee%20Balanga%20Center%20Plaza%20Mall" target="_blank" rel="noopener">📍 View map</a>
           </div>
           <div class="details__card reveal">
-            <span class="details__icon" aria-hidden="true">🌸</span>
+            <div class="details__top">
+              <span class="details__icon" aria-hidden="true">🌸</span>
+              <span class="details__number" aria-hidden="true">03</span>
+            </div>
             <h3>Attire</h3>
             <p>Smart casual<br />Soft, warm tones welcome</p>
+            <div class="details__swatches">
+              <span class="details__swatch" style="background: #e8b4b8;"></span>
+              <span class="details__swatch" style="background: #f2d6c4;"></span>
+              <span class="details__swatch" style="background: #faf0e6;"></span>
+              <span class="details__swatch" style="background: #c9a9a6;"></span>
+              <span class="details__swatch-label">palette inspiration</span>
+            </div>
           </div>
         </div>
       </div>
@@ -88,78 +144,114 @@
 
     <section class="section" id="gallery">
       <div class="container">
+        <p class="eyebrow reveal">Gallery</p>
         <h2 class="section__title reveal">Our Little Star</h2>
         <div class="gallery">
-          <picture class="reveal">
-            <source srcset="assets/images/bree1.webp" type="image/webp" />
-            <img src="assets/images/bree1.jpg" alt="Bree smiling in a pink ruffled dress with a flower headband" loading="lazy" />
-          </picture>
-          <picture class="reveal">
-            <source srcset="assets/images/bree2.webp" type="image/webp" />
-            <img src="assets/images/bree2.jpg" alt="Bree in a pink ruffled dress with a flower headband, looking at the camera" loading="lazy" />
-          </picture>
+          <div class="gallery__item reveal">
+            <picture>
+              <source srcset="assets/images/bree1.webp" type="image/webp" />
+              <img src="assets/images/bree1.jpg" alt="Bree smiling in a pink ruffled dress with a flower headband" loading="lazy" />
+            </picture>
+            <div class="gallery__caption">All smiles for her big day</div>
+          </div>
+          <div class="gallery__item reveal">
+            <picture>
+              <source srcset="assets/images/bree2.webp" type="image/webp" />
+              <img src="assets/images/bree2.jpg" alt="Bree in a pink ruffled dress with a flower headband, looking at the camera" loading="lazy" />
+            </picture>
+            <div class="gallery__caption">Little flower, big heart</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="rsvp">
+    <section class="section section--surface" id="rsvp">
       <div class="container">
-        <h2 class="section__title reveal">RSVP</h2>
-        <p class="section__lead reveal">We'd love to celebrate with you! Let us know you're coming.</p>
-
-        <form class="rsvp-form reveal" id="rsvp-form" novalidate>
-          <div class="field field--honeypot" aria-hidden="true">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
-          </div>
-
-          <div class="field">
-            <label for="full_name">Full name</label>
-            <input type="text" id="full_name" name="full_name" required autocomplete="name" />
-          </div>
-
-          <div class="field">
-            <label for="phone">Phone number</label>
-            <input type="tel" id="phone" name="phone" required autocomplete="tel" />
-          </div>
-
-          <div class="field">
-            <label for="guest_count">Additional guests</label>
-            <p class="field__hint" id="guest-count-hint">How many people are you bringing along? (not counting yourself)</p>
-            <div class="stepper">
-              <button type="button" class="stepper__btn" data-step="-1" aria-label="One fewer guest">&minus;</button>
-              <input type="number" id="guest_count" name="guest_count" min="0" max="20" value="0" inputmode="numeric" aria-describedby="guest-count-hint" />
-              <button type="button" class="stepper__btn" data-step="1" aria-label="One more guest">+</button>
+        <div class="rsvp-card reveal">
+          <div class="rsvp-card__info">
+            <div>
+              <p class="rsvp-card__eyebrow">Kindly reply</p>
+              <h2 class="rsvp-card__title">RSVP</h2>
+              <p class="rsvp-card__lead">We'd love to celebrate with you! Let us know you're coming so we can save you a seat &mdash; and a slice of cake.</p>
+            </div>
+            <div class="rsvp-card__facts">
+              <div class="rsvp-card__fact">
+                <span class="rsvp-card__fact-icon" aria-hidden="true">📅</span>
+                Sun, Sep 6 &middot; 10:00 AM
+              </div>
+              <div class="rsvp-card__fact">
+                <span class="rsvp-card__fact-icon" aria-hidden="true">📍</span>
+                Balanga Center Plaza Mall, Bataan
+              </div>
+              <div class="rsvp-card__fact">
+                <span class="rsvp-card__fact-icon" aria-hidden="true">⏳</span>
+                Please reply by August 23
+              </div>
             </div>
           </div>
 
-          <div class="field">
-            <div class="field__label-row">
-              <label for="message">Message for Bree's family (optional)</label>
-              <span class="field__counter" id="message-count" aria-hidden="true">0 / 500</span>
+          <div class="rsvp-card__form">
+            <form class="rsvp-form" id="rsvp-form" novalidate>
+              <div class="field field--honeypot" aria-hidden="true">
+                <label for="company">Company</label>
+                <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="field">
+                <label for="full_name">Full name</label>
+                <input type="text" id="full_name" name="full_name" required autocomplete="name" />
+              </div>
+
+              <div class="field">
+                <label for="phone">Phone number</label>
+                <input type="tel" id="phone" name="phone" required autocomplete="tel" />
+              </div>
+
+              <div class="field">
+                <label for="guest_count">Additional guests</label>
+                <p class="field__hint" id="guest-count-hint">How many people are you bringing along? (not counting yourself)</p>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="-1" aria-label="One fewer guest">&minus;</button>
+                  <input type="number" id="guest_count" name="guest_count" min="0" max="20" value="0" inputmode="numeric" aria-describedby="guest-count-hint" />
+                  <button type="button" class="stepper__btn" data-step="1" aria-label="One more guest">+</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="field__label-row">
+                  <label for="message">Message for Bree's family (optional)</label>
+                  <span class="field__counter" id="message-count" aria-hidden="true">0 / 500</span>
+                </div>
+                <textarea id="message" name="message" maxlength="500" placeholder="Wish Bree something sweet…"></textarea>
+              </div>
+
+              <div class="form-message" id="form-message" role="alert"></div>
+
+              <button type="submit" class="button" id="submit-button">Send RSVP</button>
+            </form>
+
+            <div class="thank-you" id="thank-you">
+              <span class="thank-you__emoji" aria-hidden="true">🎉</span>
+              <h3 class="thank-you__title">Thank you!</h3>
+              <p>Your RSVP has been received. We can't wait to celebrate with you.</p>
+              <a class="button button--ghost thank-you__calendar"
+                 href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Bree%27s%20Christening&amp;dates=20260906T100000/20260906T150000&amp;ctz=Asia/Manila&amp;details=Christening%20of%20Scarlett%20Brielle%20Lopez%20(Bree).%20Reception%20follows%20at%201%3A00%20PM%20at%20Jollibee%2C%20Balanga%20Center%20Plaza%20Mall.&amp;location=Jollibee%2C%20Balanga%20Center%20Plaza%20Mall%2C%20Balanga%2C%20Bataan"
+                 target="_blank" rel="noopener">Add to Calendar</a>
             </div>
-            <textarea id="message" name="message" maxlength="500" placeholder="Wish Bree something sweet…"></textarea>
           </div>
-
-          <div class="form-message" id="form-message" role="alert"></div>
-
-          <button type="submit" class="button" id="submit-button">Send RSVP</button>
-        </form>
-
-        <div class="thank-you" id="thank-you">
-          <span class="thank-you__emoji" aria-hidden="true">🎉</span>
-          <h3 class="thank-you__title">Thank you!</h3>
-          <p>Your RSVP has been received. We can't wait to celebrate with you.</p>
-          <a class="button button--ghost thank-you__calendar"
-             href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Bree%27s%20Christening&amp;dates=20260906T100000/20260906T150000&amp;ctz=Asia/Manila&amp;details=Christening%20of%20Scarlett%20Brielle%20Lopez%20(Bree).%20Reception%20follows%20at%201%3A00%20PM%20at%20Jollibee%2C%20Balanga%20Center%20Plaza%20Mall.&amp;location=Jollibee%2C%20Balanga%20Center%20Plaza%20Mall%2C%20Balanga%2C%20Bataan"
-             target="_blank" rel="noopener">Add to Calendar</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>With love, Bree's Family <span aria-hidden="true">♥</span></p>
+    <div class="footer__divider">
+      <span class="footer__divider-line" aria-hidden="true"></span>
+      <span aria-hidden="true">❀</span>
+      <span class="footer__divider-line" aria-hidden="true"></span>
+    </div>
+    <p class="footer__tagline">With love, Bree's Family <span aria-hidden="true">♥</span></p>
+    <p class="footer__meta">September 6, 2026 &middot; Balanga, Bataan</p>
     <p><a href="admin.html" class="footer__admin-link">Admin</a></p>
   </footer>
 
