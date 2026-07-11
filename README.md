@@ -1,4 +1,4 @@
-# Rylee & Bree Invitation
+# Bree's Christening Invitation
 
 A modern event invitation website built entirely with HTML, CSS, and vanilla JavaScript, hosted on [Vercel](https://vercel.com). Guests view event details and RSVP; each RSVP is stored as its own JSON file in [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) storage via a small serverless function — no external database to manage.
 
