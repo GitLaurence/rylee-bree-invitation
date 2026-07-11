@@ -4,6 +4,7 @@ const loginForm = document.getElementById('login-form');
 const loginMessage = document.getElementById('login-message');
 const adminPanel = document.getElementById('admin-panel');
 const adminSummary = document.getElementById('admin-summary');
+const adminMessage = document.getElementById('admin-message');
 const tableBody = document.getElementById('admin-table-body');
 const refreshButton = document.getElementById('refresh-button');
 const logoutButton = document.getElementById('logout-button');
@@ -16,6 +17,23 @@ function showLoginError(text) {
 function clearLoginError() {
   loginMessage.textContent = '';
   loginMessage.className = 'form-message';
+}
+
+function showAdminError(text) {
+  adminMessage.textContent = text;
+  adminMessage.className = 'form-message form-message--visible form-message--error';
+}
+
+function clearAdminError() {
+  adminMessage.textContent = '';
+  adminMessage.className = 'form-message';
+}
+
+function logOut() {
+  sessionStorage.removeItem(KEY_STORAGE);
+  adminPanel.hidden = true;
+  loginForm.hidden = false;
+  document.getElementById('admin-key').value = '';
 }
 
 function escapeHtml(value) {
@@ -69,6 +87,7 @@ async function loadAndRender(key) {
   const entries = await fetchRsvps(key);
   entries.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   renderRsvps(entries);
+  clearAdminError();
   loginForm.hidden = true;
   adminPanel.hidden = false;
 }
@@ -92,15 +111,18 @@ loginForm.addEventListener('submit', (event) => {
 
 refreshButton.addEventListener('click', () => {
   const key = sessionStorage.getItem(KEY_STORAGE);
-  if (key) loadAndRender(key).catch((err) => showLoginError(err.message));
+  if (!key) return;
+  loadAndRender(key).catch((err) => {
+    if (err.message === 'Unauthorized') {
+      logOut();
+      showLoginError('Your session has expired. Please log in again.');
+    } else {
+      showAdminError(err.message);
+    }
+  });
 });
 
-logoutButton.addEventListener('click', () => {
-  sessionStorage.removeItem(KEY_STORAGE);
-  adminPanel.hidden = true;
-  loginForm.hidden = false;
-  document.getElementById('admin-key').value = '';
-});
+logoutButton.addEventListener('click', logOut);
 
 const storedKey = sessionStorage.getItem(KEY_STORAGE);
 if (storedKey) {

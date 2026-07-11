@@ -2,7 +2,7 @@
 
 Chronological list of bugs found and fixed in this repo (design/feature changes excluded — see `git log` for those).
 
-> Re-audited 2026-07-11 against the current code (not just git history). No new commits since the last pass, but a fresh read of `js/admin.js`, `js/main.js`, and the calendar-link markup turned up 3 issues that are still present — see [Newly Identified](#newly-identified-not-yet-fixed) below.
+> Re-audited 2026-07-11 against the current code (not just git history). A fresh read of `js/admin.js`, `js/main.js`, and the calendar-link markup turned up 3 issues (#7–#9 below), which have since been fixed in the same pass.
 
 ## 1. Vercel Blob export reading from the wrong access mode
 - **Commit:** [`1e345c3`](https://github.com/GitLaurence/rylee-bree-invitation/commit/1e345c3) — 2026-07-09
@@ -40,22 +40,20 @@ Chronological list of bugs found and fixed in this repo (design/feature changes 
 - **Root cause:** `.petals` was a child of `.hero` rather than the page root, so it inherited the hero's clipping box instead of spanning the document.
 - **Fix:** Moved `#petals` to be the first child of `<body>`; gave `body` `position: relative`, and promoted `main`/`.footer` to `position: relative` so page content still paints above the petal layer in the stacking order.
 
-## Newly Identified (Not Yet Fixed)
-
 ## 7. Countdown timer ignores the event's timezone
-- **File:** [`index.html`](index.html) (`data-event-datetime="2026-09-06T10:00:00"`) / [`js/main.js`](js/main.js) `startCountdown()`
+- **File:** [`index.html`](index.html) (`data-event-datetime`) / [`js/main.js`](js/main.js) `startCountdown()`
 - **Symptom:** A guest viewing the site from outside the Philippines sees a countdown that's off by however many hours their timezone differs from Asia/Manila (PHT, UTC+8).
-- **Root cause:** `new Date("2026-09-06T10:00:00")` — an ISO string with no `Z`/offset — is parsed as **local time in the visitor's browser**, not Manila time. The Google Calendar links elsewhere on the page correctly pin `ctz=Asia/Manila`, but the countdown's `data-event-datetime` doesn't carry an offset at all.
-- **Suggested fix:** Add the explicit offset: `data-event-datetime="2026-09-06T10:00:00+08:00"`.
+- **Root cause:** `new Date("2026-09-06T10:00:00")` — an ISO string with no `Z`/offset — is parsed as **local time in the visitor's browser**, not Manila time. The Google Calendar links elsewhere on the page correctly pin `ctz=Asia/Manila`, but the countdown's `data-event-datetime` didn't carry an offset at all.
+- **Fix:** Added the explicit offset: `data-event-datetime="2026-09-06T10:00:00+08:00"`.
 
 ## 8. "Add to Calendar" location doesn't match the ceremony venue
 - **File:** [`index.html`](index.html) — both `.button--ghost` "Add to Calendar" links (hero and thank-you panel)
-- **Symptom:** The calendar event is set for 10:00 AM–3:00 PM (spanning both ceremony and reception) but its `location` param is only "Jollibee, Balanga Center Plaza Mall" — the reception venue. A guest tapping the calendar entry to navigate to the 10 AM start would be routed to the wrong address; the ceremony is at Cathedral Shrine and Parish of St. Joseph (added in `d2decea`).
+- **Symptom:** The calendar event is set for 10:00 AM–3:00 PM (spanning both ceremony and reception) but its `location` param was only "Jollibee, Balanga Center Plaza Mall" — the reception venue. A guest tapping the calendar entry to navigate to the 10 AM start would be routed to the wrong address; the ceremony is at Cathedral Shrine and Parish of St. Joseph (added in `d2decea`).
 - **Root cause:** The calendar links were authored before the ceremony venue existed as a distinct field on the page, and were never revisited when it was added.
-- **Suggested fix:** Either split into two calendar entries (ceremony 10 AM at the Cathedral, reception 1 PM at Jollibee) or keep one entry but update `location`/`details` to mention both addresses explicitly.
+- **Fix:** Updated `location` to the Cathedral (the 10 AM start point) and reworded `details` to explicitly call out the Cathedral for the ceremony and Jollibee for the 1 PM reception.
 
 ## 9. Admin "Refresh" failures are silently swallowed
 - **File:** [`js/admin.js`](js/admin.js) (`refreshButton` click handler) / [`admin.html`](admin.html)
-- **Symptom:** If `/api/export` fails while an admin is already logged in (network blip, revoked key, server error), clicking "Refresh" shows no visible feedback — the table just doesn't update.
-- **Root cause:** The handler calls `showLoginError(err.message)`, which writes into `#login-message` — an element that lives inside `#login-form`, and `#login-form` is `hidden` for the entire time the admin panel is showing. The error text is set, but on a hidden element, so nothing appears; the admin panel also isn't reset back to the login screen even though the session may no longer be valid.
-- **Suggested fix:** Give the admin panel its own visible error slot (or reuse `#admin-summary`), and consider logging the user out (clearing `sessionStorage`, showing the login form) on a 401 specifically.
+- **Symptom:** If `/api/export` fails while an admin is already logged in (network blip, revoked key, server error), clicking "Refresh" showed no visible feedback — the table just didn't update.
+- **Root cause:** The handler called `showLoginError(err.message)`, which writes into `#login-message` — an element that lives inside `#login-form`, and `#login-form` is `hidden` for the entire time the admin panel is showing. The error text was set, but on a hidden element, so nothing appeared; the admin panel also wasn't reset back to the login screen even though the session may no longer be valid.
+- **Fix:** Added a visible `#admin-message` error slot inside the admin panel for non-auth failures. On a 401 (`Unauthorized`) specifically, the session is now cleared and the user is logged out back to the login form with an explanatory message.
