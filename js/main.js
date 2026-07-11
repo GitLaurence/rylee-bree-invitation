@@ -86,7 +86,7 @@ function initPetals() {
     const left = (i * 7.3 + 3) % 100;
     const duration = 14 + (i % 5) * 3;
     const delay = -(i * 2.7);
-    const size = 8 + (i % 4) * 3;
+    const size = 14 + (i % 4) * 5;
     petal.style.left = `${left}%`;
     petal.style.width = `${size}px`;
     petal.style.height = `${size}px`;
